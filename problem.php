@@ -13,23 +13,37 @@ require_once OJ_ROOT.'/template/page_start.php'; ?>
                 <span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span></button></a>
                 Problem '.$row["problem_id"].'</div>';
                 echo '<div class="panel-body" style = "text-align: center;">';
-                echo '<h1>'.$row["title"].'</h1>';
+
+
+                echo ' <div id = "floatR1" class = "col-sm-2"><ul class="nav nav-pills nav-stacked">
+                <div id = "floatDiv" style="height: 0px;clear:both;display:block"></div>
+                <li role="presentation"><a href="javascript:__scrollTo(\'description\')">Description</a></li>
+                <li role="presentation"><a href="javascript:__scrollTo(\'input\')">Input</a></li>
+                <li role="presentation"><a href="javascript:__scrollTo(\'output\')">Output</a></li>
+                <li role="presentation"><a href="javascript:__scrollTo(\'sample\')">Sample</a></li>
+                <li role="presentation"><a href="javascript:__scrollTo(\'hint\')">Hint</a></li>
+                <div style="height:100px;clear:both;display:block"></div>
+                <li role="presentation"><a href="submit.php?pid='.$pid.'">Submit</a></li>
+                <li role="presentation"><a href="javascript:">Discuss</a></li>
+                </ul></div>';
+
+                echo '<div id = "floatR2" class = "col-sm-10"><h1>'.$row["title"].'</h1>';
                 echo '<div class="row"><div class = "col-sm-3"><h6>Time Limit: '.$row["time_limit"].' secend(s)</h6></div>';
                 echo '<div class = "col-sm-3"><h6>Memory Limit: '.$row["memory_limit"].' MB</h6></div>';
                 echo '<div class = "col-sm-3"><h6>Submit/Accepted: '.$row["submit"]."/".$row["accepted"].'</h6></div>';
                 echo '<div class = "col-sm-3"><h6>Source: '.$row["source"].'</h6></div></div>';
                 echo '<div class="panel-body" style = "text-align: left;">';
-                echo '<h3>Description</h3><p>'.$row["description"].'</p>';
-                echo '<h3>Input</h3><p>'.$row["input"].'</p>';
-                echo '<h3>Output</h3><p>'.$row["output"].'</p>';
+                echo '<a name="description" href="javascript:__scrollTo(\'description\')"><br/><br/><h3>Description</h3></a><p>'.$row["description"].'</p>';
+                echo '<a name="input" href="javascript:__scrollTo(\'input\')"><br/><br/><h3>Input</h3></a><p>'.$row["input"].'</p>';
+                echo '<a name="output" href="javascript:__scrollTo(\'output\')"><br/><br/><h3>Output</h3></a><p>'.$row["output"].'</p>';
 
-                echo '<h3>Sample</h3><div class="row">';
+                echo '<a name="sample" href="javascript:__scrollTo(\'sample\')"><br/><br/><h3>Sample</h3></a><div class="row">';
                 echo '<div class = "col-sm-6"><h4>Input</h4><div class = "panel panel-default"><span class="sampledata">'.$row["sample_input"].'</span></div></div>';
                 echo '<div class = "col-sm-6"><h4>Output</h4><div class = "panel panel-default"><span class="sampledata">'.$row["sample_output"].'</span></div></div>';
                 echo '</div>';
-                echo '<h3>Hint</h3><p>'.$row["hint"].'</p>';
+                echo '<a name="hint" href="javascript:__scrollTo(\'hint\')"><br/><br/><h3>Hint</h3></a><p>'.$row["hint"].'</p>';
                 echo '<div class="row">';
-                echo '<a href="submit.php?pid='.$pid.'"><button class="btn btn-lg btn-primary btn-block">Submit</button></a></div>';
+                echo '</div></div>';
                 echo '</div>';
                 $db->free_result($result);
             ?>
@@ -46,6 +60,20 @@ function gotoPbSet()
 <script>
     $(document).ready(function(){
         $("#_nav_probset").addClass("active");
+        $("#submiturl").attr("href","submit.php?pid="+<?php echo $pid?>);
+        $("#submiturl").html("Submit Prob."+<?php echo $pid?>);
     })
+    $(window).scroll(function() {
+        var scrolls = $(this).scrollTop();
+
+        $("#floatDiv").css("height",scrolls.toString()+"px");
+        if($("#floatR1").get(0).offsetTop<$("#floatR2").get(0).offsetTop){
+            $("#floatDiv").css("height","0px");
+        }
+    });
+    function __scrollTo(href) {
+        obj = $("a[name="+href+"]");
+        window.scrollTo(0, obj.get(0).offsetTop + 100);
+    }
 </script>
 <?php require_once OJ_ROOT.'/template/page_end.php'; ?>

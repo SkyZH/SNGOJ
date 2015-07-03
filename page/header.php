@@ -15,7 +15,7 @@
             <ul class="nav navbar-nav">
                 <li id="_nav_home"><a href="index.php">Home</a></li>
                 <li id="_nav_probset"><a href="problemset.php">Problems</a></li>
-                <li id="_nav_submit"><a href="submit.php">Submit</a></li>
+                <li id="_nav_submit"><a id="submiturl" href="submit.php">Submit</a></li>
             </ul>
             <ul id="RightNav" class="nav navbar-nav navbar-right">
                 <?php
