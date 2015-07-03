@@ -14,7 +14,6 @@ require_once OJ_ROOT.'/template/page_start.php'; ?>
                 Problem '.$row["problem_id"].'</div>';
                 echo '<div class="panel-body" style = "text-align: center;">';
 
-
                 echo ' <div id = "floatR1" class = "col-sm-2"><ul class="nav nav-pills nav-stacked">
                 <div id = "floatDiv" style="height: 0px;clear:both;display:block"></div>
                 <li role="presentation"><a href="javascript:__scrollTo(\'description\')">Description</a></li>
@@ -26,6 +25,8 @@ require_once OJ_ROOT.'/template/page_start.php'; ?>
                 <li role="presentation"><a href="submit.php?pid='.$pid.'">Submit</a></li>
                 <li role="presentation"><a href="javascript:">Discuss</a></li>
                 </ul></div>';
+
+                $Prob_Title = $row["title"];
 
                 echo '<div id = "floatR2" class = "col-sm-10"><h1>'.$row["title"].'</h1>';
                 echo '<div class="row"><div class = "col-sm-3"><h6>Time Limit: '.$row["time_limit"].' secend(s)</h6></div>';
@@ -61,7 +62,7 @@ function gotoPbSet()
     $(document).ready(function(){
         $("#_nav_probset").addClass("active");
         $("#submiturl").attr("href","submit.php?pid="+<?php echo $pid?>);
-        $("#submiturl").html("Submit Prob."+<?php echo $pid?>);
+        $("#submiturl").html("Submit <?php echo $pid."|".$Prob_Title ?>");
     })
     $(window).scroll(function() {
         var scrolls = $(this).scrollTop();
