@@ -36,7 +36,7 @@ else {
                             <?php if($PID=="") {
                                 echo '<div class="alert alert-warning" role="alert">
                                 <h5>You haven&apos;t chose a problem!</h5>
-                                <h6>Please go back to the problem and click submit at the bottom.</h6>
+                                <h6>Please go back to the problem and click submit on the sidebar.</h6>
                                 <h6><a href="problemset.php" class="alert-link">Goto Problems</a></h6></div>';
                             }?>
                         </div>
