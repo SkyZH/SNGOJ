@@ -1,0 +1,16 @@
+{
+  "name": "SmartJudger",
+  "version": "1.0.0",
+  "description": "An online judger",
+  "authors": [
+    "SkyZH"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
