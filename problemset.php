@@ -15,6 +15,7 @@ $ITEM_SELECT = 20;?>
                             <div class="form-group">
                             <div class="input-group">
                             <input type="text" class="form-control" placeholder="Title" name="title">
+                            
                             <span class="input-group-btn">
                                 <button class="btn btn-default" type="submit">
                                     <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
@@ -133,7 +134,7 @@ $ITEM_SELECT = 20;?>
     <?php
         echo '<script>
             $(document).ready(function(){
-                $("input[name=title").val("'.$title.'");
+                $("input[name=title]").val("'.$title.'");
             });
         </script>'
     ?>
