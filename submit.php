@@ -35,7 +35,7 @@ if ($_POST['code'] != '') {
 if ($_GET['upfile'] != '') {
     $_len = $_FILES['file']['size'];
     if ($_len >= 10 && $_len <= 65536) {
-        $TargetName = $OJ_UID.'_'.$PID.'_'.time().'_'.rand().'_'.$_FILES['file']['name'].'.code';
+        $TargetName = $OJ_UID.'_'.$PID.'_'.time().'_'.rand().'_upload.code';
         move_uploaded_file($_FILES['file']['tmp_name'], $OJ_ROOT.'data/prob/'.$TargetName);
         $db->query("INSERT INTO judge(path, uid, pid, lang, status) VALUES ('".$TargetName."',".$OJ_UID.",".
         $PID.","."0, 0)");

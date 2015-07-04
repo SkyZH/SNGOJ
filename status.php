@@ -6,7 +6,7 @@ $ITEM_SELECT = 20;?>
 <section>
     <div class="container">
         <div class="panel panel-default">
-            <div class="panel-heading">Problem Set</div>
+            <div class="panel-heading">Status</div>
             <div class="panel-body">
                 <form method="get" action="status.php" role="form">
                     <div class="row" style="line-height: 30px;">
@@ -36,15 +36,16 @@ $ITEM_SELECT = 20;?>
                             <div class="form-group">
                                 <select name="status" class="form-control">
                                     <option value = "-1"  selected = "selected">All</option>
-                                    <option value = "0">Accepted</option>
-                                    <option value = "1">Wrong Answer</option>
-                                    <option value = "2">Memory Limit Excceed</option>
-                                    <option value = "3">Time Limit Excceed</option>
-                                    <option value = "4">Runtime Error</option>
-                                    <option value = "5">Compile Error</option>
-                                    <option value = "6">Running</option>
-                                    <option value = "7">Pending</option>
-                                    <option value = "8">Unknown</option>
+                                    <option value = "0">Pending</option>
+                                    <option value = "1">Queuing</option>
+                                    <option value = "2">Accepted</option>
+                                    <option value = "3">Wrong Answer</option>
+                                    <option value = "4">Memory Limit Excceed</option>
+                                    <option value = "5">Time Limit Excceed</option>
+                                    <option value = "6">Runtime Error</option>
+                                    <option value = "7">Compile Error</option>
+                                    <option value = "8">Running</option>
+                                    <option value = "9">Unknown</option>
                                 </select>
                             </div>
                         </div>
@@ -62,12 +63,12 @@ $ITEM_SELECT = 20;?>
                 <div class="row" id = "alertDiv">
                 </div>
                 <div class = "row" style="line-height: 30px;">
-                    <div class="col-md-2 col-sm-4"><h6>Problem ID</h6></div>
-                    <div class="col-md-2 col-sm-4"><h6>User</h6></div>
-                    <div class="col-md-2 col-sm-4"><h6>Language</h6></div>
-                    <div class="col-md-4 col-sm-4"><h6>Status</h6></div>
-                    <div class="col-md-1 col-sm-4"><h6>Time</h6></div>
-                    <div class="col-md-1 col-sm-4"><h6>Memory</h6></div>
+                    <div class="col-md-2 col-xs-2"><h6>Problem ID</h6></div>
+                    <div class="col-md-2 col-xs-5"><h6>User</h6></div>
+                    <div class="col-md-2 hidden-sm hidden-xs"><h6>Language</h6></div>
+                    <div class="col-md-4 col-xs-5"><h6>Status</h6></div>
+                    <div class="col-md-1 hidden-sm hidden-xs"><h6>Time</h6></div>
+                    <div class="col-md-1 hidden-sm hidden-xs"><h6>Memory</h6></div>
                 </div>
 
                 <?php
@@ -137,16 +138,41 @@ $ITEM_SELECT = 20;?>
                     $result = $db->query('SELECT path, uid, pid, lang, status, time, memory FROM judge '.$sqlFilter.'
                     ORDER BY jid DESC LIMIT '.$startItem.', '.$ITEM_SELECT);
 
+
+                    if(!isset($GLOBALS["_OJ_MAP_STATUS_CODE"])) {
+                        $GLOBALS["_OJ_MAP_STATUS_CODE"] = array(
+                            "0" => "<label class='label label-default'>Pending</label>",
+                            "1" => "<label class='label label-default'>Queuing</label>",
+                            "2" => "<label class='label label-success'>Accepted</label>",
+                            "3" => "<label class='label label-danger'>Wrong Answer</label>",
+                            "4" => "<label class='label label-danger'>Memory Limit Excceed</label>",
+                            "5" => "<label class='label label-danger'>Time Limit Excceed</label>",
+                            "6" => "<label class='label label-danger'>Runtime Error</label>",
+                            "7" => "<label class='label label-warning'>Compile Error</label>",
+                            "8" => "<label class='label label-info'>Running</label>",
+                            "9" => "<label class='label label-warning'>Unknown</label>"
+                        );
+                    }
+                    if(!isset($GLOBALS["_OJ_MAP_LANG_CODE"])) {
+                        $GLOBALS["_OJ_MAP_LANG_CODE"] = array(
+                            "0" => "C++",
+                            "1" => "C",
+                            "2" => "Python",
+                            "3" => "Java",
+                            "4" => "Pascal"
+                        );
+                    }
                     while ($row = $db->fetch_array($result)) {
                         $__list = uc_get_user($row['uid'], true);
                         $_username = $__list[1];
                         echo "<div class='row' style='line-height: 30px;'>";
-                        echo '<a href = "problem.php?pid='.$row['pid'].'"><div class="col-md-2 col-sm-4">'.$row['pid'].'</div></a>
-                        <a href = "profile.php?uid='.$row['uid'].'"><div class="col-md-2 col-sm-4">'.$_username.'</div></a>
-                        <a href = "viewcode.php?code='.$row['path'].'"><div class="col-md-2 col-sm-4">'.$row['lang'].'</div></a>
-                        <div class="col-md-4 col-sm-4">'.$row['status'].'</div>
-                        <div class="col-md-1 col-sm-4">'.$row['time'].'</div>
-                        <div class="col-md-1 col-sm-4">'.$row['memory'].'</div>';
+                        echo '<a href = "problem.php?pid='.$row['pid'].'"><div class="col-md-2 col-xs-2">'.$row['pid'].'</div></a>
+                        <a href = "profile.php?uid='.$row['uid'].'"><div class="col-md-2 col-xs-5">'.$_username.'</div></a>
+                        <a href = "viewcode.php?code='.$row['path'].'">
+                        <div class="col-md-2 hidden-sm hidden-xs">'.$GLOBALS["_OJ_MAP_LANG_CODE"][$row['lang']].'</div></a>
+                        <div class="col-md-4 col-xs-5">'.$GLOBALS["_OJ_MAP_STATUS_CODE"][$row['status']].'</div>
+                        <div class="col-md-1 hidden-sm hidden-xs">'.$row['time'].'</div>
+                        <div class="col-md-1 hidden-sm hidden-xs">'.$row['memory'].'</div>';
                         echo "</div>";
                     }
                     $db->free_result($result);
