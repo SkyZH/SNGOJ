@@ -4,7 +4,6 @@ require_once OJ_ROOT.'/template/page_start.php'; ?>
 <section>
     <div class="container">
         <div class="panel panel-default">
-
             <?php
                 $pid = intval($_GET["pid"]);
                 $row = $db->fetch_first("SELECT * FROM problem WHERE problem_id=".$pid);
@@ -14,16 +13,18 @@ require_once OJ_ROOT.'/template/page_start.php'; ?>
                 Problem '.$row["problem_id"].'</div>';
                 echo '<div class="panel-body" style = "text-align: center;">';
 
-                echo ' <div id = "floatR1" class = "col-sm-2"><ul class="nav nav-pills nav-stacked">
+                echo ' <div id = "floatR1" class = "col-sm-2 hidden-xs">
+                <ul class="nav nav-pills nav-stacked" data-spy="affix" >
                 <div id = "floatDiv" style="height: 0px;clear:both;display:block"></div>
                 <li role="presentation"><a href="javascript:__scrollTo(\'description\')">Description</a></li>
                 <li role="presentation"><a href="javascript:__scrollTo(\'input\')">Input</a></li>
                 <li role="presentation"><a href="javascript:__scrollTo(\'output\')">Output</a></li>
                 <li role="presentation"><a href="javascript:__scrollTo(\'sample\')">Sample</a></li>
                 <li role="presentation"><a href="javascript:__scrollTo(\'hint\')">Hint</a></li>
-                <div style="height:100px;clear:both;display:block"></div>
+                <hr/>
                 <li role="presentation"><a href="submit.php?pid='.$pid.'">Submit</a></li>
-                <li role="presentation"><a href="javascript:">Discuss</a></li>
+                <li role="presentation"><a href="status.php?pid='.$pid.'">Status</a></li>
+                <li role="presentation"><a href="discuss.php?pid='.$pid.'">Discuss</a></li>
                 </ul></div>';
 
                 $Prob_Title = $row["title"];
@@ -64,14 +65,6 @@ function gotoPbSet()
         $("#submiturl").attr("href","submit.php?pid="+<?php echo $pid?>);
         $("#submiturl").html("Submit <?php echo $pid."|".$Prob_Title ?>");
     })
-    $(window).scroll(function() {
-        var scrolls = $(this).scrollTop();
-
-        $("#floatDiv").css("height",scrolls.toString()+"px");
-        if($("#floatR1").get(0).offsetTop<$("#floatR2").get(0).offsetTop){
-            $("#floatDiv").css("height","0px");
-        }
-    });
     function __scrollTo(href) {
         obj = $("a[name="+href+"]");
         window.scrollTo(0, obj.get(0).offsetTop + 100);

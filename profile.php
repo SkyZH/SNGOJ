@@ -1,7 +1,10 @@
 <?php
 require_once("./include/const.php");
-require_once(OJ_ROOT."/template/page_start.php"); ?>
+require_once(OJ_ROOT."/template/page_start.php");
 
+$get_uid = intval($_GET["uid"]);
+if($get_uid == "") $get_uid = $OJ_UID;
+?>
 <section>
     <div class="container">
         <div class="panel panel-default">
@@ -14,7 +17,7 @@ require_once(OJ_ROOT."/template/page_start.php"); ?>
                         ?>
                     </div>
                     <div class="col-sm-8">
-                        <?php list($_uid, $_username, $_email) = uc_get_user($OJ_Username); ?>
+                        <?php list($_uid, $_username, $_email) = uc_get_user($get_uid, true); ?>
                         <h2><?php echo $_username;?></h2>
                         <h5><?php echo $_email;?></h5>
                     </div>

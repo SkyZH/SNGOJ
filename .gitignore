@@ -2,6 +2,7 @@
 uc_client/
 api/
 config.inc.php
+data/
 
 # RSAKey
 *.DRSAKey

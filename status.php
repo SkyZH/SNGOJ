@@ -1,51 +1,52 @@
 <?php
-require_once './include/const.php';
-require_once OJ_ROOT.'/template/page_start.php';
+require_once("./include/const.php");
+require_once(OJ_ROOT."/template/page_start.php");
 $ITEM_SELECT = 20;?>
-
 
 <section>
     <div class="container">
         <div class="panel panel-default">
             <div class="panel-heading">Problem Set</div>
             <div class="panel-body">
-                <div class="row" style="line-height: 30px;">
-                    <form method="get" action="problemset.php" role="form">
-                        <div class="col-sm-6">
+                <form method="get" action="status.php" role="form">
+                    <div class="row" style="line-height: 30px;">
+                        <div class="col-sm-2">
                             <div class="form-group">
-                            <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Title" name="title">
-                            <span class="input-group-btn">
-                                <button class="btn btn-default" type="submit">
-                                    <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-                                </button>
-                            </span>
-                            </div>
-                            </div>
-                        </div>
-                    </form>
-                    <form method="get" action="problem.php" role="form">
-                        <div class="col-sm-6">
-                            <div class="input-group">
                                 <input type="text" class="form-control" placeholder="Problem ID" name="pid">
-                                <span class="input-group-btn">
-                                    <button class="btn btn-default" type="submit">
-                                        <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-                                    </button>
-                                </span>
                             </div>
                         </div>
-                    </form>
-                </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Username" name="user">
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Language" name="lang">
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Status" name="status">
+                            </div>
+                        </div>
+                        <div class="col-sm-1">
+                            <button class="btn btn-default" type="submit">
+                                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                            </button>
+                        </div>
+                    </div>
+                </form>
                 <div class = "row" style="line-height: 30px;">
-                    <div class="col-md-2 col-sm-4"><h6>ID</h6></div>
-                    <div class="col-md-4 col-sm-8"><h6>Title</h6></div>
-                    <div class="col-md-3 hidden-sm hidden-xs"><h6>Source</h6></div>
-                    <div class="col-md-3 hidden-sm hidden-xs"><h6>Submit/Accepted</h6></div>
+                    <div class="col-md-2 col-sm-4"><h6>Problem ID</h6></div>
+                    <div class="col-md-2 col-sm-4"><h6>User</h6></div>
+                    <div class="col-md-2 col-sm-4"><h6>Language</h6></div>
+                    <div class="col-md-4 col-sm-4"><h6>Status</h6></div>
+                    <div class="col-md-1 col-sm-4"><h6>Time</h6></div>
+                    <div class="col-md-1 col-sm-4"><h6>Memory</h6></div>
                 </div>
 
                 <?php
-                    $title = strval($_GET['title']);
                     $page = intval($_GET['page']);
                     $startItem = $page * $ITEM_SELECT;
                     $endItem = $startItem + $ITEM_SELECT;
@@ -54,20 +55,23 @@ $ITEM_SELECT = 20;?>
                     if ($title != '') {
                         $sqlFilter .= " where title like '%".$title."%'";
                     }
-                    $result = $db->query('SELECT problem_id, title, source, submit, accepted FROM problem '.$sqlFilter.' LIMIT '.
-                    $startItem.','.$ITEM_SELECT);
+                    $result = $db->query('SELECT uid, pid, lang, status, time, memory FROM judge '.$sqlFilter.'
+                    ORDER BY jid DESC LIMIT '.$startItem.', '.$ITEM_SELECT);
 
                     while ($row = $db->fetch_array($result)) {
+                        $__list = uc_get_user($row['uid'], true);
+                        $_username = $__list[1];
                         echo "<div class='row' style='line-height: 30px;'>";
-                        echo '<div class="col-md-2 col-sm-4">'.$row['problem_id'].'</div>';
-                        echo '<div class="col-md-4 col-sm-8">
-                        <a href=\'problem.php?pid='.$row['problem_id']."'>".$row['title'].'</a></div>';
-                        echo '<div class="col-md-3 hidden-sm hidden-xs">'.$row['source'].'</div>';
-                        echo '<div class="col-md-3 hidden-sm hidden-xs">'.$row['submit'].' '.$row['accepted'].'</div>';
-                        echo '</div>';
+                        echo '<div class="col-md-2 col-sm-4">'.$row['pid'].'</div>
+                        <a href = "profile.php?uid='.$row['uid'].'"><div class="col-md-2 col-sm-4">'.$_username.'</div></a>
+                        <div class="col-md-2 col-sm-4">'.$row['lang'].'</div>
+                        <div class="col-md-4 col-sm-4">'.$row['status'].'</div>
+                        <div class="col-md-1 col-sm-4">'.$row['time'].'</div>
+                        <div class="col-md-1 col-sm-4">'.$row['memory'].'</div>';
+                        echo "</div>";
                     }
                     $db->free_result($result);
-                    $result = $db->query('SELECT count(*) as sum FROM problem '.$sqlFilter);
+                    $result = $db->query('SELECT count(*) as sum FROM judge '.$sqlFilter);
 
                     $row = $db->fetch_array($result);
                     $All_Item = $row['sum'];
@@ -96,16 +100,13 @@ $ITEM_SELECT = 20;?>
                     }
                     $db->free_result($result);
                     $addPara = '';
-                    if ($title != '') {
-                        $addPara .= 'title='.urlencode($title).'&';
-                    }
                 ?>
                 <div class = "row">
                     <div class = "col-xs-12" style = "text-align: center;">
                         <nav>
                             <ul class="pagination">
                                 <li <?php echo $PrevPage == true ? '' : "class='disabled'";?>>
-                                    <a <?php echo $PrevPage == true ? "href='problemset.php?".$addPara.'page='.
+                                    <a <?php echo $PrevPage == true ? "href='status.php?".$addPara.'page='.
                                     strval($page - 1)."'" : '';?> aria-label="Previous">
                                         <span aria-hidden="true">&laquo;</span>
                                     </a>
@@ -113,12 +114,12 @@ $ITEM_SELECT = 20;?>
                                 <?php
                                     for ($i = intval($startPage); $i <= intval($endPage); ++$i) {
                                         echo '<li '.($i == $page ? "class='active'" : '').
-                                        "><a href='problemset.php?".$addPara.'page='.strval($i)."'>".strval($i + 1).
+                                        "><a href='status.php?".$addPara.'page='.strval($i)."'>".strval($i + 1).
                                         '</a></li>';
                                     }
                                 ?>
                                 <li <?php echo $NextPage == true ? '' : "class='disabled'";?>>
-                                    <a <?php echo $NextPage == true ? "href='problemset.php?".$addPara.'page='.
+                                    <a <?php echo $NextPage == true ? "href='status.php?".$addPara.'page='.
                                     strval($page + 1)."'" : '';?> aria-label="Next">
                                             <span aria-hidden="true">&raquo;</span>
                                     </a>
@@ -131,16 +132,12 @@ $ITEM_SELECT = 20;?>
         </div>
     </div>
     <?php
-        echo '<script>
-            $(document).ready(function(){
-                $("input[name=title").val("'.$title.'");
-            });
-        </script>'
     ?>
 </section>
+
 <script>
     $(document).ready(function(){
-        $("#_nav_probset").addClass("active");
+        $("#_nav_status").addClass("active");
     })
 </script>
-<?php require_once OJ_ROOT.'/template/page_end.php'; ?>
+<?php require_once(OJ_ROOT."/template/page_end.php"); ?>

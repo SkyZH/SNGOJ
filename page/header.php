@@ -16,6 +16,9 @@
                 <li id="_nav_home"><a href="index.php">Home</a></li>
                 <li id="_nav_probset"><a href="problemset.php">Problems</a></li>
                 <li id="_nav_submit"><a id="submiturl" href="submit.php">Submit</a></li>
+                <li id="_nav_status"><a href="status.php">Status</a></li>
+                <li id="_nav_rank"><a href="rank.php">Rank</a></li>
+                <li id="_nav_discuss"><a href="discuss.php">Discuss</a></li>
             </ul>
             <ul id="RightNav" class="nav navbar-nav navbar-right">
                 <?php
@@ -28,6 +31,7 @@
                     <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="profile.php">Profile</a></li>
+                        <li><a href="notification.php">Notification</a></li>
                         <li><a href="#">Help</a></li>
                         <li role="separator" class="divider"></li>
                         <li><a href="#">Settings</a></li>
