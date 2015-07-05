@@ -158,7 +158,7 @@ if ($_GET['upfile'] != '') {
 
 
 
-                <script src="./plugin/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+                <script src="//cdn.bootcss.com/ace/1.1.9/ace.js" type="text/javascript" charset="utf-8"></script>
                 <script>
                     $(document).ready(function(){
                         editor = ace.edit("editor");

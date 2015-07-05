@@ -3,6 +3,7 @@ require_once("./include/const.php");
 require_once(OJ_ROOT."/template/page_start.php"); ?>
 
 <?php
+$__ori_code = $_POST["code"];
 $__code = strval($_POST["code"]);
 $__pid = strval($_REQUEST["pid"]);
 $__title = strval($_POST["title"]);
@@ -62,7 +63,7 @@ if($_POST["submit"] <> ""){
                 </div>
                 <div class="row">
                     <div class="col-sm-12" style = "height: 300px;">
-                        <pre id="editor"><?php echo ($__code <> "")?$__code:"# What you want to say" ?></pre>
+                        <pre id="editor"><?php echo ($__ori_code <> "")?$__ori_code:"# What you want to say" ?></pre>
                     </div>
                     <textarea name = "code" style="display: none;" name="text"></textarea>
                 </div>
@@ -79,7 +80,7 @@ if($_POST["submit"] <> ""){
         </div>
     </div>
 </section>
-<script src="./plugin/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+<script src="//cdn.bootcss.com/ace/1.1.9/ace.js" type="text/javascript" charset="utf-8"></script>
 <script>
     $(document).ready(function(){
         $("#_nav_discuss").addClass("active");

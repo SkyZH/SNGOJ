@@ -207,7 +207,7 @@ $ITEM_SELECT = 20;?>
                     }
                     $startPage = $page - 4;
                     $endPage = $page + 4;
-                    
+
                     list($startPage, $endPage) = get_page_range($startPage, $endPage, $maxPage);
 
                     $db->free_result($result);

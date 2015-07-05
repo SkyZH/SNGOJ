@@ -2,9 +2,14 @@
 require_once("./include/const.php");
 require_once(OJ_ROOT."/template/page_start.php"); ?>
 
-<script type="text/javascript" src="plugin/syntax/scripts/shCore.js"></script>
-<script type="text/javascript" src="plugin/syntax/scripts/shBrushCpp.js"></script>
-<link type="text/css" rel="stylesheet" href="plugin/syntax/styles/shCoreDefault.css"/>
+<script src="//cdn.bootcss.com/SyntaxHighlighter/3.0.83/scripts/shCore.min.js"></script>
+<script src="//cdn.bootcss.com/SyntaxHighlighter/3.0.83/scripts/shBrushCpp.min.js"></script>
+<script src="//cdn.bootcss.com/SyntaxHighlighter/3.0.83/scripts/shBrushJava.min.js"></script>
+<script src="//cdn.bootcss.com/SyntaxHighlighter/3.0.83/scripts/shBrushPerl.min.js"></script>
+<script src="//cdn.bootcss.com/SyntaxHighlighter/3.0.83/scripts/shBrushRuby.js"></script>
+<script src="//cdn.bootcss.com/SyntaxHighlighter/3.0.83/scripts/shBrushPython.min.js"></script>
+
+<link href="//cdn.bootcss.com/SyntaxHighlighter/3.0.83/styles/shCore.min.css" rel="stylesheet">
 
 <section>
     <div class="container">
