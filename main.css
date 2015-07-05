@@ -33,3 +33,7 @@ body {
 .target {
   position: relative;
 }
+
+.langselect {
+    padding: 5px;
+}

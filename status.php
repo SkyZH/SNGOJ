@@ -23,25 +23,33 @@ $ITEM_SELECT = 20;?>
                         <div class="col-sm-2">
                             <div class="form-group">
                                 <select name="lang" class="form-control">
-                                    <option value = "-1"  selected = "selected">All</option>
-                                    <option value = "0">C++</option>
-                                    <option value = "1">C</option>
-                                    <option value = "2">Python</option>
-                                    <option value = "3">Java</option>
-                                    <option value = "4">Pascal</option>
+                                    <option value = ""  selected = "selected">All</option>
+                                    <option value = "0">C++(g++)</option>
+                                    <option value = "1">C(gcc)</option>
+                                    <option value = "2">Python2</option>
+                                    <option value = "3">Python3</option>
+                                    <option value = "4">Java</option>
+                                    <option value = "5">Pascal</option>
+                                    <option value = "6">Ruby</option>
+                                    <option value = "7">Perl</option>
+                                    <option value = "8">Go</option>
+                                    <option value = "9">Lua</option>
+                                    <option value = "10">Haskell</option>
                                 </select>
                             </div>
                         </div>
                         <div class="col-sm-3">
                             <div class="form-group">
                                 <select name="status" class="form-control">
-                                    <option value = "-1"  selected = "selected">All</option>
+                                    <option value = ""  selected = "selected">All</option>
                                     <option value = "0">Pending</option>
                                     <option value = "1">Queuing</option>
                                     <option value = "2">Accepted</option>
                                     <option value = "3">Wrong Answer</option>
                                     <option value = "4">Memory Limit Excceed</option>
                                     <option value = "5">Time Limit Excceed</option>
+                                    <option value = "10">Output Limit Excceed</option>
+                                    <option value = "11">Presentation Error</option>
                                     <option value = "6">Runtime Error</option>
                                     <option value = "7">Compile Error</option>
                                     <option value = "8">Running</option>
@@ -66,7 +74,8 @@ $ITEM_SELECT = 20;?>
                     <div class="col-md-2 col-xs-2"><h6>Problem ID</h6></div>
                     <div class="col-md-2 col-xs-5"><h6>User</h6></div>
                     <div class="col-md-2 hidden-sm hidden-xs"><h6>Language</h6></div>
-                    <div class="col-md-4 col-xs-5"><h6>Status</h6></div>
+                    <div class="col-md-2 col-xs-5"><h6>Status</h6></div>
+                    <div class="col-md-2 hidden-sm hidden-xs"><h6>Submit</h6></div>
                     <div class="col-md-1 hidden-sm hidden-xs"><h6>Time</h6></div>
                     <div class="col-md-1 hidden-sm hidden-xs"><h6>Memory</h6></div>
                 </div>
@@ -101,10 +110,10 @@ $ITEM_SELECT = 20;?>
                     if ($__uid != '') {
                         $addPara .= 'uid='.urlencode($__uid).'&';
                     }
-                    if ($__lang != '' && $__lang <> '-1') {
+                    if ($__lang != '') {
                         $addPara .= 'lang='.urlencode($__lang).'&';
                     }
-                    if ($__status != '' && $__status <> '-1') {
+                    if ($__status != '') {
                         $addPara .= 'status='.urlencode($__status).'&';
                     }
 
@@ -135,7 +144,7 @@ $ITEM_SELECT = 20;?>
                         if(!$firstFilter) $firstFilter = true;
                     }
 
-                    $result = $db->query('SELECT path, uid, pid, lang, status, time, memory FROM judge '.$sqlFilter.'
+                    $result = $db->query('SELECT path, uid, pid, lang, status, submittime, time, memory FROM judge '.$sqlFilter.'
                     ORDER BY jid DESC LIMIT '.$startItem.', '.$ITEM_SELECT);
 
 
@@ -155,11 +164,17 @@ $ITEM_SELECT = 20;?>
                     }
                     if(!isset($GLOBALS["_OJ_MAP_LANG_CODE"])) {
                         $GLOBALS["_OJ_MAP_LANG_CODE"] = array(
-                            "0" => "C++",
-                            "1" => "C",
-                            "2" => "Python",
-                            "3" => "Java",
-                            "4" => "Pascal"
+                            "0" => "C++(g++)",
+                            "1" => "C(gcc)",
+                            "2" => "Python2",
+                            "3" => "Python3",
+                            "4" => "Java",
+                            "5" => "Pascal",
+                            "6" => "Ruby",
+                            "7" => "Perl",
+                            "8" => "Go",
+                            "9" => "Lua",
+                            "10" => "Haskell"
                         );
                     }
                     while ($row = $db->fetch_array($result)) {
@@ -168,9 +183,10 @@ $ITEM_SELECT = 20;?>
                         echo "<div class='row' style='line-height: 30px;'>";
                         echo '<a href = "problem.php?pid='.$row['pid'].'"><div class="col-md-2 col-xs-2">'.$row['pid'].'</div></a>
                         <a href = "profile.php?uid='.$row['uid'].'"><div class="col-md-2 col-xs-5">'.$_username.'</div></a>
-                        <a href = "viewcode.php?code='.$row['path'].'">
+                        <a href = "viewcode.php?lang='.$row['lang'].'&code='.$row['path'].'">
                         <div class="col-md-2 hidden-sm hidden-xs">'.$GLOBALS["_OJ_MAP_LANG_CODE"][$row['lang']].'</div></a>
-                        <div class="col-md-4 col-xs-5">'.$GLOBALS["_OJ_MAP_STATUS_CODE"][$row['status']].'</div>
+                        <div class="col-md-2 col-xs-5">'.$GLOBALS["_OJ_MAP_STATUS_CODE"][$row['status']].'</div>
+                        <div class="col-md-2 hidden-sm hidden-xs">'.$row['submittime'].'</div>
                         <div class="col-md-1 hidden-sm hidden-xs">'.$row['time'].'</div>
                         <div class="col-md-1 hidden-sm hidden-xs">'.$row['memory'].'</div>';
                         echo "</div>";

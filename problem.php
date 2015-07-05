@@ -8,8 +8,6 @@ require_once OJ_ROOT.'/template/page_start.php'; ?>
                 $pid = intval($_GET["pid"]);
                 $row = $db->fetch_first("SELECT * FROM problem WHERE problem_id=".$pid);
                 echo '<div class="panel-heading">
-                <a href="problemset.php"><button type="button" class="btn btn-default btn-xs" aria-label="Left Align">
-                <span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span></button></a>
                 Problem '.$row["problem_id"].'</div>';
                 echo '<div class="panel-body" style = "text-align: center;">';
 
@@ -25,7 +23,14 @@ require_once OJ_ROOT.'/template/page_start.php'; ?>
                 <li role="presentation"><a href="submit.php?pid='.$pid.'">Submit</a></li>
                 <li role="presentation"><a href="status.php?pid='.$pid.'">Status</a></li>
                 <li role="presentation"><a href="discuss.php?pid='.$pid.'">Discuss</a></li>
-                </ul></div>';
+                </ul></div>
+                <div class = "visible-xs">
+                <ul class="nav nav-pills nav-stacked">
+                <li role="presentation"><a href="submit.php?pid='.$pid.'">Submit</a></li>
+                <li role="presentation"><a href="status.php?pid='.$pid.'">Status</a></li>
+                <li role="presentation"><a href="discuss.php?pid='.$pid.'">Discuss</a></li>
+                </ul></div>
+                ';
 
                 $Prob_Title = $row["title"];
 

@@ -17,8 +17,9 @@
                 <li id="_nav_probset"><a href="problemset.php">Problems</a></li>
                 <li id="_nav_submit"><a id="submiturl" href="submit.php">Submit</a></li>
                 <li id="_nav_status"><a href="status.php">Status</a></li>
-                <li id="_nav_rank"><a href="rank.php">Rank</a></li>
                 <li id="_nav_discuss"><a href="discuss.php">Discuss</a></li>
+                <li id="_nav_rank"><a href="rank.php">Rank</a></li>
+
             </ul>
             <ul id="RightNav" class="nav navbar-nav navbar-right">
                 <?php

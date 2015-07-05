@@ -17,13 +17,16 @@ if ($PID != '') {
 if ($_POST['code'] != '') {
     $code = $_POST['code'];
     $_len = strlen($code);
+    $_lang = $_POST['lang'];
     if ($_len >= 10 && $_len <= 65536) {
         $TargetName = $OJ_UID.'_'.$PID.'_'.time().'_'.rand().'_editor.code';
         if ($fp = fopen($OJ_ROOT.'data/prob/'.$TargetName, 'w')) {
             if (@fwrite($fp, $code)) {
                 fclose($fp);
-                $db->query("INSERT INTO judge(path, uid, pid, lang, status) VALUES ('".$TargetName."',".$OJ_UID.",".
-                $PID.","."0, 0)");
+                date_default_timezone_set('PRC');
+                $__submit_time = date('Y-m-d H:i:s');
+                $db->query("INSERT INTO judge(path, uid, pid, lang, status, submittime) VALUES ('".$TargetName."',".$OJ_UID.",".
+                $PID.",".$_lang.", 0, now())");
             } else {
                 fclose($fp);
             }
@@ -36,9 +39,12 @@ if ($_GET['upfile'] != '') {
     $_len = $_FILES['file']['size'];
     if ($_len >= 10 && $_len <= 65536) {
         $TargetName = $OJ_UID.'_'.$PID.'_'.time().'_'.rand().'_upload.code';
+        $_lang = $_POST['lang'];
         move_uploaded_file($_FILES['file']['tmp_name'], $OJ_ROOT.'data/prob/'.$TargetName);
-        $db->query("INSERT INTO judge(path, uid, pid, lang, status) VALUES ('".$TargetName."',".$OJ_UID.",".
-        $PID.","."0, 0)");
+        date_default_timezone_set('PRC');
+        $__submit_time = date('Y-m-d H:i:s');
+        $db->query("INSERT INTO judge(path, uid, pid, lang, status, submittime) VALUES ('".$TargetName."',".$OJ_UID.",".
+        $PID.",".$_lang.", 0, now())");
     }
 }
 ?>
@@ -51,15 +57,19 @@ if ($_GET['upfile'] != '') {
             <div class="panel-body">
                 <div class = "row">
                     <div class = "col-sm-3">
-                        <h3>Language/Compiler</h3>
-                        <ul class="nav nav-pills nav-stacked">
-                            <li role="presentation" class="active langselect lang_c"><a href="javascript:">C++</a></li>
-                            <li role="presentation" class="langselect lang_c"><a href="javascript:">C</a></li>
-                            <li role="presentation" class="langselect lang_c"><a href="javascript:">gcc</a></li>
-                            <li role="presentation" class="langselect lang_c"><a href="javascript:">g++</a></li>
-                            <li role="presentation" class="langselect lang_py"><a href="javascript:">Python</a></li>
-                            <li role="presentation" class="langselect lang_ja"><a href="javascript:">Java</a></li>
-                        </ul>
+                        <div class="list-group">
+                            <a value="0" role="presentation" class="list-group-item active langselect lang_c" href="javascript:">C++/g++</a>
+                            <a value="1" role="presentation" class="list-group-item langselect lang_c" href="javascript:">C/gcc</a>
+                            <a value="2" role="presentation" class="list-group-item langselect lang_py" href="javascript:">Python2</a>
+                            <a value="3" role="presentation" class="list-group-item langselect lang_py" href="javascript:">Python3</a>
+                            <a value="4" role="presentation" class="list-group-item langselect lang_ja" href="javascript:">Java</a>
+                            <a value="5" role="presentation" class="list-group-item langselect lang_pascal" href="javascript:">Pascal</a>
+                            <a value="6" role="presentation" class="list-group-item langselect lang_ruby" href="javascript:">Ruby</a>
+                            <a value="7" role="presentation" class="list-group-item langselect lang_perl" href="javascript:">Perl</a>
+                            <a value="8" role="presentation" class="list-group-item langselect lang_go" href="javascript:">Go</a>
+                            <a value="9" role="presentation" class="list-group-item langselect lang_lua" href="javascript:">Lua</a>
+                            <a value="10"  role="presentation" class="list-group-item langselect lang_haskell" href="javascript:">Haskell</a>
+                        </div>
                         <hr/>
                         <div>
                             <?php if ($PID == '') {
@@ -112,6 +122,20 @@ if ($_GET['upfile'] != '') {
                                 action="submit.php?upfile=file&pid=<?php echo $PID ?>"
                                 method="post" enctype="multipart/form-data" role="form">
                                 <input type="file" name="file" id="fileUpload"/>
+                                <select style = "display: none" name="lang" class="form-control">
+                                    <option value = ""  selected = "selected">All</option>
+                                    <option value = "0">C++(g++)</option>
+                                    <option value = "1">C(gcc)</option>
+                                    <option value = "2">Python2</option>
+                                    <option value = "3">Python3</option>
+                                    <option value = "4">Java</option>
+                                    <option value = "5">Pascal</option>
+                                    <option value = "6">Ruby</option>
+                                    <option value = "7">Perl</option>
+                                    <option value = "8">Go</option>
+                                    <option value = "9">Lua</option>
+                                    <option value = "10">Haskell</option>
+                                </select>
                             </form>
                         </div>
 
@@ -119,6 +143,20 @@ if ($_GET['upfile'] != '') {
                 </div>
                 <form style = "display:none" id = "virtualForm" method="post" action="submit.php?pid=<?php echo $PID ?>" role="form">
                     <textarea name = "code"></textarea>
+                    <select name="lang" class="form-control">
+                        <option value = ""  selected = "selected">All</option>
+                        <option value = "0">C++(g++)</option>
+                        <option value = "1">C(gcc)</option>
+                        <option value = "2">Python2</option>
+                        <option value = "3">Python3</option>
+                        <option value = "4">Java</option>
+                        <option value = "5">Pascal</option>
+                        <option value = "6">Ruby</option>
+                        <option value = "7">Perl</option>
+                        <option value = "8">Go</option>
+                        <option value = "9">Lua</option>
+                        <option value = "10">Haskell</option>
+                    </select>
                 </form>
 
 
@@ -154,11 +192,18 @@ if ($_GET['upfile'] != '') {
                         if($(this).hasClass("lang_c"))editor.getSession().setMode("ace/mode/c_cpp");
                         if($(this).hasClass("lang_py"))editor.getSession().setMode("ace/mode/python");
                         if($(this).hasClass("lang_ja"))editor.getSession().setMode("ace/mode/java");
-
+                        if($(this).hasClass("lang_pascal"))editor.getSession().setMode("ace/mode/pascal");
+                        if($(this).hasClass("lang_ruby"))editor.getSession().setMode("ace/mode/ruby");
+                        if($(this).hasClass("lang_perl"))editor.getSession().setMode("ace/mode/perl");
+                        if($(this).hasClass("lang_go"))editor.getSession().setMode("ace/mode/golang");
+                        if($(this).hasClass("lang_lua"))editor.getSession().setMode("ace/mode/lua");
+                        if($(this).hasClass("lang_haskell"))editor.getSession().setMode("ace/mode/haskell");
                     });
 
                     function submitFile(){
+                        $("select[name=lang]").val($("a[class*=active]").attr("value"));
                         if($("#navUpload").hasClass("active")) {
+
                             $("#virtualFormUpload").get(0).submit();
                         } else {
                             $("textarea[name=code]").val(editor.getValue());
