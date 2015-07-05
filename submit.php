@@ -1,7 +1,7 @@
 <?php
 require_once './include/const.php';
 require_once OJ_ROOT.'/template/page_start.php'; ?>
-<?php $PID = strval($_GET['pid']);
+<?php $PID = sql_check_input(strval($_GET['pid']));
 if ($PID != '') {
     $AddCodeFront = '<a href="problem.php?pid='.$PID.'"
         <button type="button" class="btn btn-default btn-xs" aria-label="Left Align">
@@ -17,14 +17,13 @@ if ($PID != '') {
 if ($_POST['code'] != '') {
     $code = $_POST['code'];
     $_len = strlen($code);
-    $_lang = $_POST['lang'];
+    $_lang = sql_check_input($_POST['lang']);
+
     if ($_len >= 10 && $_len <= 65536) {
         $TargetName = $OJ_UID.'_'.$PID.'_'.time().'_'.rand().'_editor.code';
         if ($fp = fopen($OJ_ROOT.'data/prob/'.$TargetName, 'w')) {
             if (@fwrite($fp, $code)) {
                 fclose($fp);
-                date_default_timezone_set('PRC');
-                $__submit_time = date('Y-m-d H:i:s');
                 $db->query("INSERT INTO judge(path, uid, pid, lang, status, submittime) VALUES ('".$TargetName."',".$OJ_UID.",".
                 $PID.",".$_lang.", 0, now())");
             } else {
@@ -39,10 +38,8 @@ if ($_GET['upfile'] != '') {
     $_len = $_FILES['file']['size'];
     if ($_len >= 10 && $_len <= 65536) {
         $TargetName = $OJ_UID.'_'.$PID.'_'.time().'_'.rand().'_upload.code';
-        $_lang = $_POST['lang'];
+        $_lang = sql_check_input($_POST['lang']);
         move_uploaded_file($_FILES['file']['tmp_name'], $OJ_ROOT.'data/prob/'.$TargetName);
-        date_default_timezone_set('PRC');
-        $__submit_time = date('Y-m-d H:i:s');
         $db->query("INSERT INTO judge(path, uid, pid, lang, status, submittime) VALUES ('".$TargetName."',".$OJ_UID.",".
         $PID.",".$_lang.", 0, now())");
     }

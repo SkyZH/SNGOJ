@@ -1,6 +1,7 @@
 <?php
 require_once("./include/const.php");
-require_once(OJ_ROOT."/template/page_start.php"); ?>
+require_once(OJ_ROOT."/template/page_start.php");
+$ITEM_SELECT = 20; ?>
 
 <section>
     <div class="container">
@@ -9,8 +10,8 @@ require_once(OJ_ROOT."/template/page_start.php"); ?>
         <div class="panel-body">
             <div class="row" style="line-height: 50px;">
                 <div class="col-xs-12">
-                    <a href = "newthread.php" class="btn btn-primary">New Thread</a>
-                    <a href = "newthread.php" class="btn btn-primary">New Gossip</a>
+                    <a href = "newthread.php?pid=<?php echo $_GET["pid"]?>" class="btn btn-primary">New Thread</a>
+                    <a href = "newthread.php?pid=0" class="btn btn-primary">New Gossip</a>
                 </div>
             </div>
             <form method="get" action="discuss.php" role="form">
@@ -48,10 +49,10 @@ require_once(OJ_ROOT."/template/page_start.php"); ?>
                 <div class="col-md-2 hidden-xs hidden-sm"><h6>Time</h6></div>
             </div>
             <?php
-                $__pid = strval($_GET["pid"]);
-                $_user = strval($_GET["user"]);
-                $__title = strval($_GET["title"]);
-                $__uid = strval($_GET["uid"]);
+                $__pid = sql_check_input(strval($_GET["pid"]));
+                $_user = sql_check_input(strval($_GET["user"]));
+                $__title = sql_check_input(strval($_GET["title"]));
+                $__uid = sql_check_input(strval($_GET["uid"]));
                 if($uid == "")
                     if($_user != "") {
                         $__list = uc_get_user($_user);
@@ -79,6 +80,72 @@ require_once(OJ_ROOT."/template/page_start.php"); ?>
                 if ($__title != '') {
                     $addPara .= 'title='.urlencode($__title).'&';
                 }
+
+                $page = intval($_GET['page']);
+                $startItem = $page * $ITEM_SELECT;
+                $endItem = $startItem + $ITEM_SELECT;
+
+                $sqlFilter = '';
+                if ($__pid != '' || $__uid != '' || $__title != '') {
+                    $sqlFilter .= " where ";
+                }
+                $firstFilter = false;
+                if ($__pid != '') {
+
+                    $sqlFilter .= ($firstFilter?" and ":"")." pid = ".$__pid;
+                    if(!$firstFilter) $firstFilter = true;
+                }
+                if ($__uid != '') {
+                    $sqlFilter .= ($firstFilter?" and ":"")." uid = ".$__uid;
+                    if(!$firstFilter) $firstFilter = true;
+                }
+                if ($__title != '') {
+                    $sqlFilter .= ($firstFilter?" and ":"")." lang = ".$__title;
+                    if(!$firstFilter) $firstFilter = true;
+                }
+                $result = $db->query('SELECT did, pid, uid, title, submittime FROM discuss '.$sqlFilter.'
+                ORDER BY did DESC LIMIT '.$startItem.', '.$ITEM_SELECT);
+
+                while ($row = $db->fetch_array($result)) {
+                    $__list = uc_get_user($row['uid'], true);
+                    $_username = $__list[1];
+                    $_targetpid = $row["pid"]=="0"?"Gossip":$row["pid"];
+                    echo "<div class='row' style='line-height: 30px;'>";
+                    echo "<a href = \"problem.php?pid={$row["pid"]}\"><div class=\"col-md-2 col-xs-2\">{$_targetpid}</div></a>
+                    <a href = \"profile.php?uid={$row["uid"]}\"><div class=\"col-md-3 col-xs-3\">{$_username}</div></a>
+                    <a href = \"viewthread.php?did={$row["did"]}\"><div class=\"col-md-5 col-xs-7\">{$row["title"]}</div></a>
+                    <div class=\"col-md-2 hidden-xs hidden-sm\">{$row["submittime"]}</div>";
+                    echo "</div>";
+                }
+                $db->free_result($result);
+                $result = $db->query('SELECT count(*) as sum FROM judge '.$sqlFilter);
+
+                $row = $db->fetch_array($result);
+                $All_Item = $row['sum'];
+                $maxPage = intval(ceil($All_Item / $ITEM_SELECT));
+                if ($endItem >= $All_Item) {
+                    $NextPage = false;
+                } else {
+                    $NextPage = true;
+                }
+                if ($startItem <= 0) {
+                    $PrevPage = false;
+                } else {
+                    $PrevPage = true;
+                }
+                $startPage = $page - 4;
+                $endPage = $page + 4;
+                if ($startPage < 0 && $endPage >= $maxPage) {
+                    $startPage = 0;
+                    $endPage = $maxPage - 1;
+                } elseif ($startPage < 0) {
+                    $endPage -= $startPage;
+                    $startPage = 0;
+                } elseif ($endPage >= $maxPage) {
+                    $startPage = $startPage - ($endPage - $maxPage + 1);
+                    $endPage = $maxPage - 1;
+                }
+                $db->free_result($result);
             ?>
         </div>
     </div>

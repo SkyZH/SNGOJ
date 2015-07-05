@@ -81,11 +81,12 @@ $ITEM_SELECT = 20;?>
                 </div>
 
                 <?php
-                    $__pid = strval($_GET["pid"]);
-                    $_user = strval($_GET["user"]);
-                    $__lang = strval($_GET["lang"]);
-                    $__status = strval($_GET["status"]);
-                    $__uid = strval($_GET["uid"]);
+                    $__pid = sql_check_input(strval($_GET["pid"]));
+                    $_user = sql_check_input(strval($_GET["user"]));
+                    $__lang = sql_check_input(strval($_GET["lang"]));
+                    $__status = sql_check_input(strval($_GET["status"]));
+                    $__uid = sql_check_input(strval($_GET["uid"]));
+
                     if($uid == "")
                         if($_user != "") {
                             $__list = uc_get_user($_user);

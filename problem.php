@@ -5,7 +5,8 @@ require_once OJ_ROOT.'/template/page_start.php'; ?>
     <div class="container">
         <div class="panel panel-default">
             <?php
-                $pid = intval($_GET["pid"]);
+                $pid = strval($_GET["pid"]);
+                $pid = sql_check_input($pid);
                 $row = $db->fetch_first("SELECT * FROM problem WHERE problem_id=".$pid);
                 echo '<div class="panel-heading">
                 Problem '.$row["problem_id"].'</div>';

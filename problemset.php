@@ -15,7 +15,7 @@ $ITEM_SELECT = 20;?>
                             <div class="form-group">
                             <div class="input-group">
                             <input type="text" class="form-control" placeholder="Title" name="title">
-                            
+
                             <span class="input-group-btn">
                                 <button class="btn btn-default" type="submit">
                                     <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
@@ -52,6 +52,9 @@ $ITEM_SELECT = 20;?>
                     $endItem = $startItem + $ITEM_SELECT;
 
                     $sqlFilter = '';
+                    
+                    $title = sql_check_input($title);
+
                     if ($title != '') {
                         $sqlFilter .= " where title like '%".$title."%'";
                     }

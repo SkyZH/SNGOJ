@@ -4,4 +4,5 @@
     require_once(OJ_ROOT.'/config.inc.php');
     require_once(OJ_ROOT.'/include/db_mysql.class.php');
     require_once(OJ_ROOT.'/uc_client/client.php');
+    require_once(OJ_ROOT."/include/mysql_check.php");
  ?>
