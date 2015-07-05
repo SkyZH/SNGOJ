@@ -31,10 +31,9 @@ $ITEM_SELECT = 20; ?>
                             <input type="text" class="form-control" placeholder="Title" name="title">
                         </div>
                     </div>
-                    <div class="col-sm-1">
+
+                    <div class="col-md-2">
                         <a href = "discuss.php" class="btn btn-default">Reset</a>
-                    </div>
-                    <div class="col-sm-1">
                         <button class="btn btn-default" type="submit">
                             <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
                         </button>
@@ -45,8 +44,8 @@ $ITEM_SELECT = 20; ?>
             <div class = "row" style="line-height: 30px;">
                 <div class="col-md-2 col-xs-2"><h6>Problem ID</h6></div>
                 <div class="col-md-3 col-xs-3"><h6>User</h6></div>
-                <div class="col-md-5 col-xs-7"><h6>Title</h6></div>
-                <div class="col-md-2 hidden-xs hidden-sm"><h6>Time</h6></div>
+                <div class="col-md-4 col-xs-7"><h6>Title</h6></div>
+                <div class="col-md-3 hidden-xs hidden-sm"><h6>Time</h6></div>
             </div>
             <?php
                 $__pid = sql_check_input(strval($_GET["pid"]));
@@ -113,12 +112,12 @@ $ITEM_SELECT = 20; ?>
                     echo "<div class='row' style='line-height: 30px;'>";
                     echo "<a href = \"problem.php?pid={$row["pid"]}\"><div class=\"col-md-2 col-xs-2\">{$_targetpid}</div></a>
                     <a href = \"profile.php?uid={$row["uid"]}\"><div class=\"col-md-3 col-xs-3\">{$_username}</div></a>
-                    <a href = \"viewthread.php?did={$row["did"]}\"><div class=\"col-md-5 col-xs-7\">{$row["title"]}</div></a>
-                    <div class=\"col-md-2 hidden-xs hidden-sm\">{$row["submittime"]}</div>";
+                    <a href = \"viewthread.php?did={$row["did"]}\"><div class=\"col-md-4 col-xs-7\">{$row["title"]}</div></a>
+                    <div class=\"col-md-3 hidden-xs hidden-sm\">{$row["submittime"]}</div>";
                     echo "</div>";
                 }
                 $db->free_result($result);
-                $result = $db->query('SELECT count(*) as sum FROM judge '.$sqlFilter);
+                $result = $db->query('SELECT count(*) as sum FROM discuss '.$sqlFilter);
 
                 $row = $db->fetch_array($result);
                 $All_Item = $row['sum'];
@@ -135,18 +134,37 @@ $ITEM_SELECT = 20; ?>
                 }
                 $startPage = $page - 4;
                 $endPage = $page + 4;
-                if ($startPage < 0 && $endPage >= $maxPage) {
-                    $startPage = 0;
-                    $endPage = $maxPage - 1;
-                } elseif ($startPage < 0) {
-                    $endPage -= $startPage;
-                    $startPage = 0;
-                } elseif ($endPage >= $maxPage) {
-                    $startPage = $startPage - ($endPage - $maxPage + 1);
-                    $endPage = $maxPage - 1;
-                }
+
+                list($startPage, $endPage) = get_page_range($startPage, $endPage, $maxPage);
                 $db->free_result($result);
             ?>
+            <div class = "row">
+                <div class = "col-xs-12" style = "text-align: center;">
+                    <nav>
+                        <ul class="pagination">
+                            <li <?php echo $PrevPage == true ? '' : "class='disabled'";?>>
+                                <a <?php echo $PrevPage == true ? "href='discuss.php?".$addPara.'page='.
+                                strval($page - 1)."'" : '';?> aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                            <?php
+                                for ($i = intval($startPage); $i <= intval($endPage); ++$i) {
+                                    echo '<li '.($i == $page ? "class='active'" : '').
+                                    "><a href='discuss.php?".$addPara.'page='.strval($i)."'>".strval($i + 1).
+                                    '</a></li>';
+                                }
+                            ?>
+                            <li <?php echo $NextPage == true ? '' : "class='disabled'";?>>
+                                <a <?php echo $NextPage == true ? "href='discuss.php?".$addPara.'page='.
+                                strval($page + 1)."'" : '';?> aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
         </div>
     </div>
     <?php

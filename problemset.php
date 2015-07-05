@@ -39,8 +39,8 @@ $ITEM_SELECT = 20;?>
                     </form>
                 </div>
                 <div class = "row" style="line-height: 30px;">
-                    <div class="col-md-2 col-sm-4"><h6>ID</h6></div>
-                    <div class="col-md-4 col-sm-8"><h6>Title</h6></div>
+                    <div class="col-md-2 col-xs-4"><h6>ID</h6></div>
+                    <div class="col-md-4 col-xs-8"><h6>Title</h6></div>
                     <div class="col-md-3 hidden-sm hidden-xs"><h6>Source</h6></div>
                     <div class="col-md-3 hidden-sm hidden-xs"><h6>Submit/Accepted</h6></div>
                 </div>
@@ -52,7 +52,7 @@ $ITEM_SELECT = 20;?>
                     $endItem = $startItem + $ITEM_SELECT;
 
                     $sqlFilter = '';
-                    
+
                     $title = sql_check_input($title);
 
                     if ($title != '') {
@@ -63,8 +63,8 @@ $ITEM_SELECT = 20;?>
 
                     while ($row = $db->fetch_array($result)) {
                         echo "<div class='row' style='line-height: 30px;'>";
-                        echo '<div class="col-md-2 col-sm-4">'.$row['problem_id'].'</div>';
-                        echo '<div class="col-md-4 col-sm-8">
+                        echo '<div class="col-md-2 col-xs-4">'.$row['problem_id'].'</div>';
+                        echo '<div class="col-md-4 col-xs-8">
                         <a href=\'problem.php?pid='.$row['problem_id']."'>".$row['title'].'</a></div>';
                         echo '<div class="col-md-3 hidden-sm hidden-xs">'.$row['source'].'</div>';
                         echo '<div class="col-md-3 hidden-sm hidden-xs">'.$row['submit'].' '.$row['accepted'].'</div>';
@@ -88,16 +88,8 @@ $ITEM_SELECT = 20;?>
                     }
                     $startPage = $page - 4;
                     $endPage = $page + 4;
-                    if ($startPage < 0 && $endPage >= $maxPage) {
-                        $startPage = 0;
-                        $endPage = $maxPage - 1;
-                    } elseif ($startPage < 0) {
-                        $endPage -= $startPage;
-                        $startPage = 0;
-                    } elseif ($endPage >= $maxPage) {
-                        $startPage = $startPage - ($endPage - $maxPage + 1);
-                        $endPage = $maxPage - 1;
-                    }
+                    list($startPage, $endPage) = get_page_range($startPage, $endPage, $maxPage);
+
                     $db->free_result($result);
                     $addPara = '';
                     if ($title != '') {
